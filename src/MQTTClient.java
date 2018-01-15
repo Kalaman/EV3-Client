@@ -1,7 +1,8 @@
-
+package src;
 
 import org.fusesource.mqtt.client.*;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
@@ -31,17 +32,19 @@ public class MQTTClient {
             mqtt.setHost(SERVER_IP, SERVER_PORT);
             connection = mqtt.blockingConnection();
             connection.connect();
+            JConsolePanel.writeToConsole("Connected to MQTT-Server [" + SERVER_IP + ":" + SERVER_PORT + "]");
             connection.subscribe(topic);
 
         }
         catch (Exception e){
             e.printStackTrace();
+            JConsolePanel.writeToConsole("Connection with MQTT-Server failed " + SERVER_IP + ":" + SERVER_PORT);
         }
     }
 
     public interface MQTTListener {
-        public void onNodeDataReceived(String jsonData);
-        public void onLogReceived(String log);
+        public void onNodeDataReceived(ArrayList<Node> nodes);
+        public void onLogReceived(String jsonData);
     }
 
     public boolean addMQTTListener(MQTTListener listener) {
@@ -60,15 +63,24 @@ public class MQTTClient {
                     while(true) {
                         Message message = connection.receive();
                         String payload = new String(message.getPayload(), StandardCharsets.UTF_8);
-                        message.ack();
 
                         if (message.getTopic().equals(TOPIC_LOG)) {
                             for (MQTTListener listener : mqttListener)
                                 listener.onLogReceived(payload);
-                        } else if (message.getTopic().equals(TOPIC_NODE)) {
-                            for (MQTTListener listener : mqttListener)
-                                listener.onNodeDataReceived(payload);
                         }
+                        else if (message.getTopic().equals(TOPIC_NODE))
+                        {
+                            ArrayList <Node> nodeArrayList = MQTTClient.parseJSONNodeData(payload);
+                            if (nodeArrayList != null)
+                            {
+                                JConsolePanel.writeToConsole("New Nodes received ["+nodeArrayList.size()+"]");
+
+                                for (MQTTListener listener : mqttListener)
+                                    listener.onNodeDataReceived(nodeArrayList);
+                            }
+                        }
+
+                        message.ack();
                     }
                 }
                 catch (Exception e) {
@@ -131,6 +143,12 @@ public class MQTTClient {
 
                 resultList.add(new Node(nodeXPos,nodeYPos,nodeDeg));
             }
+        }
+        catch (JSONException je)
+        {
+            je.printStackTrace();
+            JConsolePanel.writeToConsole("Unknown JSON type received");
+            return null;
         }
         catch (Exception e){
             e.printStackTrace();
