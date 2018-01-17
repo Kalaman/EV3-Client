@@ -22,7 +22,12 @@ public class App {
 
             @Override
             public void onLogReceived(String log) {
-                System.out.println(log);
+                JConsolePanel.writeToConsole(log);
+            }
+
+            @Override
+            public void onDriveReceived(float distanceInCM) {
+
             }
         });
 
