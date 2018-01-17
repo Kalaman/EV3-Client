@@ -30,6 +30,7 @@ public class JRobotPanel extends JPanel{
             AffineTransform at = new AffineTransform();
             at.setToScale(getWidth()/diagram.getWidth(), getWidth()/diagram.getWidth());
             graphics2D.transform(at);
+            diagram.getViewRect().getBounds();
             diagram.render(graphics2D);
         }catch (Exception e){
             e.printStackTrace();

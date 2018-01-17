@@ -13,15 +13,16 @@ import java.util.ArrayList;
  */
 public class MQTTClient {
     private MQTT mqtt;
-    private BlockingConnection connection;
+    private static BlockingConnection connection;
     private Topic [] topic;
 
     private ArrayList<MQTTListener> mqttListener;
-    private static final String SERVER_IP = "localhost";
+    private static final String SERVER_IP = "192.168.43.197";
     private static final int SERVER_PORT = 1883;
 
-    private static final String TOPIC_LOG = "log";
-    private static final String TOPIC_NODE = "node";
+    public static final String TOPIC_LOG = "log";
+    public static final String TOPIC_NODE = "node";
+    public static final String TOPIC_DRIVE = "drive";
 
     public MQTTClient() {
         mqtt = new MQTT();
@@ -45,6 +46,7 @@ public class MQTTClient {
     public interface MQTTListener {
         public void onNodeDataReceived(ArrayList<Node> nodes);
         public void onLogReceived(String jsonData);
+        public void onDriveReceived(float distanceInCM);
     }
 
     public boolean addMQTTListener(MQTTListener listener) {
@@ -79,6 +81,13 @@ public class MQTTClient {
                                     listener.onNodeDataReceived(nodeArrayList);
                             }
                         }
+                        else if (message.getTopic().equals(TOPIC_DRIVE))
+                        {
+                            float distance = Float.parseFloat(payload) / (float)100;
+
+                            for (MQTTListener listener : mqttListener)
+                                listener.onDriveReceived(distance);
+                        }
 
                         message.ack();
                     }
@@ -91,7 +100,7 @@ public class MQTTClient {
         }.start();
     }
 
-    public void publish (String message, String topic) {
+    public static void publish (String message, String topic) {
         try {
             connection.publish(topic, message.getBytes() ,QoS.EXACTLY_ONCE, false);
         } catch (Exception e) {
@@ -103,7 +112,7 @@ public class MQTTClient {
         publish(msg,TOPIC_LOG);
     }
 
-    public boolean publishNodeData (ArrayList <Node> nodeArrayList) {
+    public static boolean publishNodeData (ArrayList <Node> nodeArrayList) {
         JSONObject json = new JSONObject();
         JSONArray array = new JSONArray();
 

@@ -31,7 +31,6 @@ public class JMainFrame extends JFrame{
         this.add(jConsolePanel,BorderLayout.WEST);
 
         this.setVisible(true);
-
     }
 
     @Override
