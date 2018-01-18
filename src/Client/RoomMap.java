@@ -37,10 +37,6 @@ public class RoomMap {
         try (BufferedReader br = new BufferedReader(new FileReader(svgSrc.substring(1)))) {
             String line;
             while ((line = br.readLine()) != null) {
-                if(line.contains("line")) {
-                    line.split(" ");
-                    System.out.println(line);
-                }
 
                 String [] lineArray = line.split(" ");
 
@@ -76,8 +72,8 @@ public class RoomMap {
                         y2 = Integer.parseInt(word);
                     }
                 }
-
-                roomLines.add(new Line(x1,x2,y1,y2));
+                if (!(x1 == 0 && y1== 0 && x2 == 0 && y2 == 0))
+                    roomLines.add(new Line(x1,x2,y1,y2));
             }
         } catch (Exception e) {
             e.printStackTrace();

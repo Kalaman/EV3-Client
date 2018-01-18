@@ -1,5 +1,6 @@
 package src.Client;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -14,7 +15,12 @@ public class App {
         MQTTClient mqttClient = new MQTTClient();
         mqttClient.addMQTTListener(new MQTTClient.MQTTListener() {
             @Override
-            public void onNodeDataReceived(ArrayList<src.Client.Particle> nodes) {
+            public void onDriveReceived(float distanceInCM) {
+
+            }
+
+            @Override
+            public void onUltrasonicDistanceReceived(float distanceInCM) {
 
             }
 
@@ -26,8 +32,24 @@ public class App {
 
 		mqttClient.startListeningThread();
 
-		frame.getjRobotPanel().testParticle();
 
+        /** For testing purposes
+         */
+
+        Particle particle = new Particle(284,80,270);
+//        drawNode(particle, Color.RED,graphics2D());
+
+//        particle.drawParticleLine(particle,Color.RED,graphics2D());
+        Line line = new Line(245,295 ,50 ,50 );
+        //graphics2D.drawLine(line.getX1(),line.getY1(),line.getX2(),line.getY2());
+        Point p = particle.findIntersection(line.getX1(),line.getY1(),line.getX2(),line.getY2());
+        System.out.println(p);
+        //graphics2D.drawOval( (int) p.getX() - 2, (int) p.getY() -2, 4,4);
+        
     }
+
+
+
+
 
 }

@@ -4,6 +4,9 @@ package src.Client;
  * Created by Kalaman on 17.01.18.
  */
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
 import com.kitfox.svg.SVGDiagram;
 
 public class Localizator {
@@ -26,9 +29,28 @@ public class Localizator {
     }
 
     public void generateRandomParticles() {
+
+        ArrayList<Line> lines = roomMap.getRoomLines();
         for (int i=0;i<initParticleAmount;++i) {
-            int randomX = (int)(Math.random() * map.getWidth()) ;
-            int randomY = (int)(Math.random() * map.getHeight()) ;
+            boolean found = false;
+
+            int randomX = 0;
+            int randomY = 0;
+
+            while (!found) {
+                randomX = (int) (Math.random() * roomMap.getSvgDiagram().getWidth());
+                randomY = (int) (Math.random() * roomMap.getSvgDiagram().getHeight());
+
+                for (int j = 0; j < lines.size(); ++j) {
+                    Line currentLine = lines.get(j);
+                    if (randomX >= currentLine.getX1() && randomX < currentLine.getX2() &&
+                            randomY >= currentLine.getY2()) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+
             float randomDeg = (float) (Math.random() * 360) ;
 
             particleList.add(new Particle(randomX,randomY,randomDeg,0));

@@ -1,6 +1,7 @@
 package src.Client;
 
 import com.kitfox.svg.SVGDiagram;
+import com.kitfox.svg.SVGUniverse;
 
 import javax.swing.*;
 
@@ -14,7 +15,6 @@ public class JRobotPanel extends JPanel{
     Graphics2D graphics2D;
     Localizator localizator;
     RoomMap roomMap;
-    SVGDiagram svgDiagram;
 
     public JRobotPanel() {
         setPreferredSize(new Dimension(JConstants.PANEL_ROBOT_SIZE_X,JConstants.WINDOW_SIZE_Y));
@@ -30,7 +30,7 @@ public class JRobotPanel extends JPanel{
 
         graphics2D = (Graphics2D)g;
 
-        svgDiagram = roomMap.getSvgDiagram();
+        SVGDiagram svgDiagram = roomMap.getSvgDiagram();
 
         AffineTransform at = new AffineTransform();
         at.setToScale(getWidth()/svgDiagram.getWidth(), getWidth()/svgDiagram.getWidth());

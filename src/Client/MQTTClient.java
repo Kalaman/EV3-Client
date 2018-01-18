@@ -1,4 +1,4 @@
-package Client;
+package src.Client;
 
 import org.fusesource.mqtt.client.*;
 import org.json.JSONArray;
@@ -13,20 +13,21 @@ import java.util.ArrayList;
  */
 public class MQTTClient {
     private MQTT mqtt;
-    private BlockingConnection connection;
+    private static BlockingConnection connection;
     private Topic [] topic;
 
     private ArrayList<MQTTListener> mqttListener;
     private static final String SERVER_IP = "localhost";
     private static final int SERVER_PORT = 1883;
 
-    private static final String TOPIC_LOG = "log";
-    private static final String TOPIC_NODE = "node";
+    public static final String TOPIC_LOG = "log";
+    public static final String TOPIC_DRIVE = "drive";
+    public static final String TOPIC_SONIC_DISTANCE = "distance";
 
     public MQTTClient() {
         mqtt = new MQTT();
         mqttListener = new ArrayList<MQTTListener>();
-        topic = new Topic[] {new Topic(TOPIC_LOG, QoS.EXACTLY_ONCE),new Topic(TOPIC_NODE, QoS.EXACTLY_ONCE)};
+        topic = new Topic[] {new Topic(TOPIC_LOG, QoS.EXACTLY_ONCE),new Topic(TOPIC_SONIC_DISTANCE, QoS.EXACTLY_ONCE)};
 
         try {
             mqtt.setHost(SERVER_IP, SERVER_PORT);
@@ -43,8 +44,9 @@ public class MQTTClient {
     }
 
     public interface MQTTListener {
-        public void onNodeDataReceived(ArrayList<Particle> nodes);
         public void onLogReceived(String jsonData);
+        public void onDriveReceived(float distanceInCM);
+        public void onUltrasonicDistanceReceived(float distanceInCM);
     }
 
     public boolean addMQTTListener(MQTTListener listener) {
@@ -68,18 +70,19 @@ public class MQTTClient {
                             for (MQTTListener listener : mqttListener)
                                 listener.onLogReceived(payload);
                         }
-                        else if (message.getTopic().equals(TOPIC_NODE))
+                        else if (message.getTopic().equals(TOPIC_DRIVE))
                         {
-                            ArrayList <Particle> nodeArrayList = MQTTClient.parseJSONNodeData(payload);
-                            if (nodeArrayList != null)
-                            {
-                                JConsolePanel.writeToConsole("New Nodes received ["+nodeArrayList.size()+"]");
+                            float distance = Float.parseFloat(payload) / (float)100;
 
-                                for (MQTTListener listener : mqttListener)
-                                    listener.onNodeDataReceived(nodeArrayList);
-                            }
+                            for (MQTTListener listener : mqttListener)
+                                listener.onDriveReceived(distance);
                         }
+                        else if (message.getTopic().equals(TOPIC_SONIC_DISTANCE)){
+                            float sonicDistance = Float.parseFloat(payload);
 
+                            for (MQTTListener listener : mqttListener)
+                                listener.onUltrasonicDistanceReceived(sonicDistance);
+                        }
                         message.ack();
                     }
                 }
@@ -91,7 +94,7 @@ public class MQTTClient {
         }.start();
     }
 
-    public void publish (String message, String topic) {
+    public static void publish (String message, String topic) {
         try {
             connection.publish(topic, message.getBytes() ,QoS.EXACTLY_ONCE, false);
         } catch (Exception e) {
@@ -102,59 +105,5 @@ public class MQTTClient {
     public void publishLog (String msg) {
         publish(msg,TOPIC_LOG);
     }
-
-    public boolean publishNodeData (ArrayList <Particle> nodeArrayList) {
-        JSONObject json = new JSONObject();
-        JSONArray array = new JSONArray();
-
-        try {
-            for (Particle node: nodeArrayList)
-            {
-                JSONObject item = new JSONObject();
-
-                item.put("x", node.getPositionX());
-                item.put("y", node.getPositionY());
-                item.put("deg", node.getDegree());
-
-                array.put(item);
-            }
-
-            json.put("nodes", array);
-            publish(json.toString(),TOPIC_LOG);
-        }
-        catch(Exception e){
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-
-    public static ArrayList<Particle> parseJSONNodeData (String jsonData) {
-        ArrayList<Particle> resultList = new ArrayList<>();
-        try{
-            JSONObject obj = new JSONObject(jsonData);
-
-            JSONArray arr = obj.getJSONArray("nodes");
-            for (int i = 0; i < arr.length(); i++)
-            {
-                int nodeXPos = arr.getJSONObject(i).getInt("x");
-                int nodeYPos = arr.getJSONObject(i).getInt("y");
-                float nodeDeg = (float)arr.getJSONObject(i).getDouble("deg");
-
-                resultList.add(new Particle(nodeXPos,nodeYPos,nodeDeg));
-            }
-        }
-        catch (JSONException je)
-        {
-            je.printStackTrace();
-            JConsolePanel.writeToConsole("Unknown JSON type received");
-            return null;
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-        return resultList;
-    }
-
 
 }

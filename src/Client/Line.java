@@ -1,4 +1,4 @@
-package Client;
+package src.Client;
 
 public class Line {
     int x1, x2, y1, y2;
