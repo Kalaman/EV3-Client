@@ -32,8 +32,8 @@ public class App {
 
 		mqttClient.startListeningThread();
 
-        frame.jRobotPanel.testParticle();
-        
+		frame.getjRobotPanel().testParticle();
+
     }
 
 
