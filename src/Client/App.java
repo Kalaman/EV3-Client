@@ -12,27 +12,7 @@ public class App {
 
         JMainFrame frame = new JMainFrame();
 
-        MQTTClient mqttClient = new MQTTClient();
-        mqttClient.addMQTTListener(new MQTTClient.MQTTListener() {
-            @Override
-            public void onDriveReceived(float distanceInCM) {
 
-            }
-
-            @Override
-            public void onUltrasonicDistanceReceived(float distanceInCM) {
-                JConsolePanel.writeToConsole("New distance to wall: " + distanceInCM);
-            }
-
-            @Override
-            public void onLogReceived(String log) {
-                System.out.println(log);
-            }
-        });
-
-		mqttClient.startListeningThread();
-
-		frame.getjRobotPanel().testParticle();
 
     }
 

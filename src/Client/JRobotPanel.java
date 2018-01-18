@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 public class JRobotPanel extends JPanel{
     Graphics2D graphics2D;
-    Localizator localizator;
+    public static Localizator localizator;
     RoomMap roomMap;
 
     public JRobotPanel() {
@@ -22,6 +22,28 @@ public class JRobotPanel extends JPanel{
 
         roomMap = new RoomMap("/src/files/houses.svg");
         localizator = new Localizator(100, roomMap);
+
+        MQTTClient mqttClient = new MQTTClient();
+        mqttClient.addMQTTListener(new MQTTClient.MQTTListener() {
+            @Override
+            public void onDriveReceived(float distanceInCM) {
+
+            }
+
+            @Override
+            public void onUltrasonicDistanceReceived(float distanceInCM) {
+                JConsolePanel.writeToConsole("New distance to wall: " + distanceInCM);
+                JRobotPanel.localizator.filterParticles(distanceInCM / 100);
+                repaint();
+            }
+
+            @Override
+            public void onLogReceived(String log) {
+                System.out.println(log);
+            }
+        });
+
+        mqttClient.startListeningThread();
     }
 
     @Override
