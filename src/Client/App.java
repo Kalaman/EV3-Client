@@ -1,4 +1,4 @@
-package Client;
+package src.Client;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -32,7 +32,6 @@ public class App {
 
 		mqttClient.startListeningThread();
 
-        LineReader lReader = new LineReader();
 
         /** For testing purposes
          */
@@ -41,11 +40,10 @@ public class App {
 //        drawNode(particle, Color.RED,graphics2D());
 
 //        particle.drawParticleLine(particle,Color.RED,graphics2D());
-        Client.Line line = new Client.Line(245,295 ,50 ,50 );
+        Line line = new Line(245,295 ,50 ,50 );
         //graphics2D.drawLine(line.getX1(),line.getY1(),line.getX2(),line.getY2());
         Point p = particle.findIntersection(line.getX1(),line.getY1(),line.getX2(),line.getY2());
         System.out.println(p);
-        System.out.println(particle.getDistanceToWall(p));
         //graphics2D.drawOval( (int) p.getX() - 2, (int) p.getY() -2, 4,4);
         
     }

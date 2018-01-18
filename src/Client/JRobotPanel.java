@@ -20,7 +20,7 @@ public class JRobotPanel extends JPanel{
         setLayout(new BorderLayout());
 
         roomMap = new RoomMap("/src/files/houses.svg");
-        localizator = new Localizator(0,roomMap.getSvgDiagram());
+        localizator = new Localizator(0,roomMap);
     }
 
     /**
