@@ -74,7 +74,25 @@ public class Particle {
         else {
             return distance;
         }
+    }
 
+    /**
+     * Sets the weight of the particle, depending on the measured distance
+     * @param roomMap
+     * @param sensorRange Distance measured with Ultrasonic sensor
+     */
+    public void evaluateParticle(RoomMap roomMap,float sensorRange){
+
+        float distance = getDistanceToWall(roomMap.getRoomLines());
+
+        if (distance == -1 )
+            setWeight(0);
+        else if (Math.abs(distance - sensorRange) < 1)
+            setWeight(3);
+        else if (Math.abs(distance - sensorRange) < 5)
+            setWeight(2);
+        else
+            setWeight(1);
     }
 
     public Point findIntersection(int x1, int y1, int x2, int y2){

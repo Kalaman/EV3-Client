@@ -10,11 +10,13 @@ public class Localizator {
     private int initParticleAmount;
     private ArrayList<Particle> particleList;
     private SVGDiagram map;
+    private RoomMap roomMap;
 
-    public Localizator (int particleAmount,SVGDiagram map) {
+    public Localizator (int particleAmount,RoomMap roomMap) {
         this.initParticleAmount = particleAmount;
         this.particleList = new ArrayList<Particle>();
-        this.map = map;
+        this.map = roomMap.getSvgDiagram();
+        this.roomMap = roomMap;
 
         generateRandomParticles();
     }
@@ -33,4 +35,14 @@ public class Localizator {
         }
     }
 
+    public void filterParticles(float sensorRange){
+        ArrayList<Particle> temp_particleList = new ArrayList<>();
+
+        for (Particle particle : particleList) {
+            particle.evaluateParticle(roomMap,sensorRange);
+            if (particle.getWeight() != 0)
+                temp_particleList.add(particle);
+        }
+        particleList = temp_particleList;
+    }
 }
