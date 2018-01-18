@@ -1,6 +1,5 @@
-package Client;
+package src.Client;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -10,12 +9,12 @@ public class App {
 
     public static void main (String[] args) {
 
-        new JMainFrame();
+        JMainFrame frame = new JMainFrame();
 
         MQTTClient mqttClient = new MQTTClient();
         mqttClient.addMQTTListener(new MQTTClient.MQTTListener() {
             @Override
-            public void onNodeDataReceived(ArrayList<Particle> nodes) {
+            public void onNodeDataReceived(ArrayList<src.Client.Particle> nodes) {
 
             }
 
@@ -27,27 +26,8 @@ public class App {
 
 		mqttClient.startListeningThread();
 
-        LineReader lReader = new LineReader();
+		frame.getjRobotPanel().testParticle();
 
-        /** For testing purposes
-         */
-
-        Particle particle = new Particle(284,80,270);
-//        drawNode(particle, Color.RED,graphics2D());
-
-//        particle.drawParticleLine(particle,Color.RED,graphics2D());
-        Client.Line line = new Client.Line(245,295 ,50 ,50 );
-        //graphics2D.drawLine(line.getX1(),line.getY1(),line.getX2(),line.getY2());
-
-        ArrayList<Line> list = new ArrayList<>();
-        list.add(line);
-        System.out.println(particle.getDistanceToWall(list));
-        //graphics2D.drawOval( (int) p.getX() - 2, (int) p.getY() -2, 4,4);
-        
     }
-
-
-
-
 
 }
