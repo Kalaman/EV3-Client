@@ -80,18 +80,47 @@ public class Localizator {
                 beta -= particleList.get(index).getWeight();
                 index = (index + 1) % particleList.size();
             }
-            temp_particleList.add(generateNewParticle(particleList.get(index)));
+            if ((i % 200) == 0){
+                temp_particleList.add(generateNewParticle(particleList.get(index),true));
+            } else {
+                temp_particleList.add(generateNewParticle(particleList.get(index),false));
+            }
+
         }
 
         particleList = temp_particleList;
     }
 
-    public Particle generateNewParticle(Particle oldParticle){
-        int degree = (int) (Math.random() * 360);
-        int endX = (int) (oldParticle.getPositionX() + (Math.cos(Math.toRadians(degree)) * 10));
-        int endY = (int) (oldParticle.getPositionY() + (Math.sin(Math.toRadians(degree)) * 10));
-        Particle newParticle = new Particle(endX, endY, oldParticle.getDegree(),0);
-        float distance = (float) Math.sqrt(Math.pow(oldParticle.getPositionX()-endX,2) + Math.pow(oldParticle.getPositionY()-endY,2));;
+    public Particle generateNewParticle(Particle oldParticle, boolean random){
+
+        boolean found = false;
+        int newX = 0, newY = 0;
+        while (!found) {
+            if (random){
+                newX = (int) (Math.random() * roomMap.getSvgDiagram().getWidth());
+                newY = (int) (Math.random() * roomMap.getSvgDiagram().getHeight());
+            } else {
+                int degree = (int) (Math.random() * 360);
+                newX = (int) (oldParticle.getPositionX() + (Math.cos(Math.toRadians(degree)) * 10) + 1);
+                newY = (int) (oldParticle.getPositionY() + (Math.sin(Math.toRadians(degree)) * 10));
+            }
+
+            ArrayList<Line> lines = roomMap.getRoomLines();
+
+
+            //Check if Particle has valid location
+            for (int j = 0; j < lines.size(); ++j) {
+                Line currentLine = lines.get(j);
+                if (newX >= currentLine.getX1() && newX < currentLine.getX2() &&
+                        newY >= currentLine.getY2()) {
+                    found = true;
+                    break;
+                }
+            }
+        }
+
+        Particle newParticle = new Particle(newX, newY, oldParticle.getDegree(),0);
+        float distance = (float) Math.sqrt(Math.pow(oldParticle.getPositionX()-newX,2) + Math.pow(oldParticle.getPositionY()-newY,2));;
         return newParticle;
     }
 }
