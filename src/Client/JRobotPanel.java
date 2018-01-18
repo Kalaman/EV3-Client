@@ -21,7 +21,7 @@ public class JRobotPanel extends JPanel{
         setLayout(new BorderLayout());
 
         roomMap = new RoomMap("/src/files/houses.svg");
-        localizator = new Localizator(100, roomMap);
+        localizator = new Localizator(1000, roomMap);
 
         MQTTClient mqttClient = new MQTTClient();
         mqttClient.addMQTTListener(new MQTTClient.MQTTListener() {
@@ -33,7 +33,7 @@ public class JRobotPanel extends JPanel{
             @Override
             public void onUltrasonicDistanceReceived(float distanceInCM) {
                 JConsolePanel.writeToConsole("New distance to wall: " + distanceInCM);
-                JRobotPanel.localizator.filterParticles(distanceInCM / 100);
+                JRobotPanel.localizator.filterParticles(distanceInCM);
                 repaint();
             }
 
@@ -100,16 +100,16 @@ public class JRobotPanel extends JPanel{
 //        System.out.println(particle.getDistanceToWall(roomMap.getRoomLines()));
 //        g.drawOval( (int) particle.intersection.getX() - 2, (int) particle.intersection.getY() -2, 4,4);
 //
-//        particle.evaluateParticle(roomMap,15.3f);
+//        particle.evaluateParticle(roomMap,19.0f);
 //        System.out.println(particle.getWeight());
 
-        localizator.filterParticles(20);
-        try {
-            TimeUnit.SECONDS.sleep(3);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        repaint();
+//        localizator.filterParticles(20,1);
+//        try {
+//            TimeUnit.SECONDS.sleep(3);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        repaint();
 
 //        Particle p = new Particle(50,50,270,1);
 //        localizator.generateNewParticle(p);
