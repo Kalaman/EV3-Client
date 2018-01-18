@@ -88,9 +88,9 @@ public class Particle {
         if (distance == -1 )
             setWeight(0);
         else{
-            calculatedWeight = 20 - (int) Math.abs(distance - sensorRange);
+            calculatedWeight = 20 - (int) Math.pow(Math.abs(distance - sensorRange),1.5);
             if (calculatedWeight <= 0)
-                calculatedWeight = 1;
+                calculatedWeight = 0;
         }
             setWeight(calculatedWeight);
     }
