@@ -70,16 +70,17 @@ public class JRobotPanel extends JPanel{
 //        Graphics2D g = (Graphics2D) getGraphics();
 //        Particle particle = new Particle(260,70,270,0);
 //        AffineTransform at = new AffineTransform();
-//        at.setToScale(getWidth()/svgDiagram.getWidth(), getWidth()/svgDiagram.getWidth());
+//        at.setToScale(getWidth()/roomMap.getSvgDiagram().getWidth(), getWidth()/roomMap.getSvgDiagram().getWidth());
 //        g.transform(at);
 //        drawParticle(particle,Color.RED, (Graphics2D) g);
-////        particle.drawParticleLine(Color.RED, (Graphics2D) g);
+//        particle.drawParticleLine(Color.RED, (Graphics2D) g);
 //
 //        System.out.println(particle.getDistanceToWall(roomMap.getRoomLines()));
 //        g.drawOval( (int) particle.intersection.getX() - 2, (int) particle.intersection.getY() -2, 4,4);
 //
-//        particle.evaluateParticle(roomMap,19.1f);
+//        particle.evaluateParticle(roomMap,15.3f);
 //        System.out.println(particle.getWeight());
+
         localizator.filterParticles(20);
         try {
             TimeUnit.SECONDS.sleep(3);
@@ -87,5 +88,8 @@ public class JRobotPanel extends JPanel{
             e.printStackTrace();
         }
         repaint();
+
+//        Particle p = new Particle(50,50,270,1);
+//        localizator.generateNewParticle(p);
     }
 }
