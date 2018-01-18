@@ -1,6 +1,7 @@
 package Client;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 
 /**
@@ -32,9 +33,21 @@ public class Particle {
     public float getDegree() {
         return degree;
     }
-    
-    public float getDistanceToWall(Point intersection) {
-        return (float) Math.sqrt(Math.pow(positionX-intersection.getX(),2) + Math.pow(positionY-intersection.getY(),2));
+
+
+    public float getDistanceToWall(ArrayList<Line> lines) {
+        Point intersection = null;
+
+        for (Line line : lines) {
+            intersection = findIntersection(line.getX1(), line.getY1(), line.getX2(), line.getY2());
+            if (intersection != null)
+                break;
+        }
+
+        if (intersection == null)
+            return -1;
+        else
+            return (float) Math.sqrt(Math.pow(positionX-intersection.getX(),2) + Math.pow(positionY-intersection.getY(),2));
     }
 
     public Point findIntersection(int x1, int y1, int x2, int y2){

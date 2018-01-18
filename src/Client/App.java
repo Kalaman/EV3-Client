@@ -38,9 +38,10 @@ public class App {
 //        particle.drawParticleLine(particle,Color.RED,graphics2D());
         Client.Line line = new Client.Line(245,295 ,50 ,50 );
         //graphics2D.drawLine(line.getX1(),line.getY1(),line.getX2(),line.getY2());
-        Point p = particle.findIntersection(line.getX1(),line.getY1(),line.getX2(),line.getY2());
-        System.out.println(p);
-        System.out.println(particle.getDistanceToWall(p));
+
+        ArrayList<Line> list = new ArrayList<>();
+        list.add(line);
+        System.out.println(particle.getDistanceToWall(list));
         //graphics2D.drawOval( (int) p.getX() - 2, (int) p.getY() -2, 4,4);
         
     }
