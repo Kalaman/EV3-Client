@@ -1,4 +1,4 @@
-package Client;
+package src.Client;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,6 +27,10 @@ public class JMainFrame extends JFrame{
 
         this.setVisible(true);
 
+    }
+
+    public JRobotPanel getjRobotPanel() {
+        return jRobotPanel;
     }
 
     @Override
