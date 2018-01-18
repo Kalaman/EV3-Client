@@ -1,4 +1,4 @@
-package Client;
+package src.Client;
 
 import java.awt.*;
 
@@ -12,11 +12,13 @@ public class Particle {
     private float degree;
     private int endX;
     private int endY;
+    private int weight;
     
-    public Particle (int posX,int posY,float deg) {
+    public Particle (int posX,int posY,float deg,int particleWeight) {
         positionX = posX;
         positionY = posY;
         degree = deg % 360;
+        weight = particleWeight;
         endX = getPositionX() + (int)(Math.cos(Math.toRadians(getDegree())) * 100);
         endY = getPositionY() + (int)(Math.sin(Math.toRadians(getDegree())) * 100);
     }
