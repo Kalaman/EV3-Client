@@ -1,6 +1,7 @@
 package src.Client;
 
 import com.kitfox.svg.SVGDiagram;
+import com.kitfox.svg.SVGUniverse;
 
 import javax.swing.*;
 
@@ -13,15 +14,6 @@ public class JRobotPanel extends JPanel{
     Graphics2D graphics2D;
     Localizator localizator;
     RoomMap roomMap;
-    SVGDiagram svgDiagram;
-
-    public SVGDiagram getSvgDiagram() {
-        return svgDiagram;
-    }
-
-    public void setSvgDiagram(SVGDiagram svgDiagram) {
-        this.svgDiagram = svgDiagram;
-    }
 
     public JRobotPanel() {
         setPreferredSize(new Dimension(JConstants.PANEL_ROBOT_SIZE_X,JConstants.WINDOW_SIZE_Y));
@@ -56,7 +48,7 @@ public class JRobotPanel extends JPanel{
 
         graphics2D = (Graphics2D)g;
 
-        svgDiagram = roomMap.getSvgDiagram();
+        SVGDiagram svgDiagram = roomMap.getSvgDiagram();
 
         AffineTransform at = new AffineTransform();
         at.setToScale(getWidth()/svgDiagram.getWidth(), getWidth()/svgDiagram.getWidth());
@@ -96,7 +88,7 @@ public class JRobotPanel extends JPanel{
         Graphics2D g = (Graphics2D) getGraphics();
         Particle particle = new Particle(260,70,185,0);
         AffineTransform at = new AffineTransform();
-        at.setToScale(getWidth()/svgDiagram.getWidth(), getWidth()/svgDiagram.getWidth());
+        at.setToScale(getWidth()/roomMap.getSvgDiagram().getWidth(), getWidth()/roomMap.getSvgDiagram().getWidth());
         g.transform(at);
         drawParticle(particle,Color.RED, (Graphics2D) g);
 //        particle.drawParticleLine(Color.RED, (Graphics2D) g);

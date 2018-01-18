@@ -78,7 +78,7 @@ public class Particle {
     }
 
     public Point findIntersection(int x1, int y1, int x2, int y2){
-                int d = (x1-x2)*(positionY-endY) - (y1-y2)*(positionX-endX);
+        int d = (x1-x2)*(positionY-endY) - (y1-y2)*(positionX-endX);
         if (d == 0) return null;
         int xi = ((positionX-endX)*(x1*y2-y1*x2)-(x1-x2)*(positionX*endY-positionY*endX))/d;
         int yi = ((positionY-endY)*(x1*y2-y1*x2)-(y1-y2)*(positionX*endY-positionY*endX))/d;
