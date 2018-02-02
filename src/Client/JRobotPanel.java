@@ -88,18 +88,15 @@ public class JRobotPanel extends JPanel{
         graphics2D.setColor(oldColor);
     }
 
-    public void testParticle(){
-//        Graphics2D g = (Graphics2D) getGraphics();
-//        Particle particle = new Particle(260,70,270,0);
-//        AffineTransform at = new AffineTransform();
-//        at.setToScale(getWidth()/roomMap.getSvgDiagram().getWidth(), getWidth()/roomMap.getSvgDiagram().getWidth());
-//        g.transform(at);
-//        drawParticle(particle,Color.RED, (Graphics2D) g);
-//        particle.drawParticleLine(Color.RED, (Graphics2D) g);
-//
-//        System.out.println(particle.getDistanceToWall(roomMap.getRoomLines()));
-//        g.drawOval( (int) particle.intersection.getX() - 2, (int) particle.intersection.getY() -2, 4,4);
-//
+    public void testParticle(Graphics2D graphics2D){
+        Particle particle = new Particle(260,70,193,0);
+        Point p=particle.findIntersection(245,0,245,50);
+        drawParticle(particle,Color.RED, (Graphics2D) graphics2D);
+        particle.drawParticleLine(Color.RED, (Graphics2D) graphics2D);
+
+        System.out.println(particle.getDistanceToWall(roomMap.getRoomLines()));
+        graphics2D.drawOval( (int) particle.intersection.getX() - 2, (int) particle.intersection.getY() -2, 4,4);
+
 //        particle.evaluateParticle(roomMap,19.0f);
 //        System.out.println(particle.getWeight());
 
