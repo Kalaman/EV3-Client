@@ -60,7 +60,7 @@ public class Particle {
         float distance = -1,temp_distance = 0;
         for (Line line : lines) {
             temp_intersection = findIntersection(line.getX1(), line.getY1(), line.getX2(), line.getY2());
-            if (temp_intersection != null && temp_intersection.getY() <= 50){
+            if (temp_intersection != null){
                 temp_distance = (float) Math.sqrt(Math.pow(positionX-temp_intersection.getX(),2) + Math.pow(positionY-temp_intersection.getY(),2));
                 if (temp_distance < distance || distance == -1){
                     distance = temp_distance;
@@ -88,7 +88,7 @@ public class Particle {
         if (distance == -1 )
             setWeight(0);
         else{
-            calculatedWeight = 20 - (int) Math.pow(Math.abs(distance - sensorRange),1.5);
+            calculatedWeight = maxWeight - (int) Math.abs(distance - sensorRange);
             if (calculatedWeight <= 0)
                 calculatedWeight = 0;
         }
@@ -103,6 +103,8 @@ public class Particle {
         Point p = new Point(xi,yi);
         if (xi < Math.min(x1,x2) || xi > Math.max(x1,x2)) return null;
         if (xi < Math.min(positionX,endX) || xi > Math.max(positionX,endX)) return null;
+        if (yi < Math.min(y1,y2) || yi > Math.max(y1,y2)) return null;
+        if (yi < Math.min(positionY,endY) || yi > Math.max(positionY,endY)) return null;
         return p;
     }
 
