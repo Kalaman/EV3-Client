@@ -13,27 +13,24 @@ public class Particle {
     private float degree;
     private int endX;
     private int endY;
-    private int weight;
+    private double weight;
     public Point intersection = null;
 
-    public int getWeight() {
+    public double getWeight() {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 
-    public Particle (int posX, int posY, float deg, int particleWeight) {
+    public Particle (int posX, int posY, float deg, double particleWeight) {
         positionX = posX;
         positionY = posY;
         degree = deg % 360;
         weight = particleWeight;
         endX = getPositionX() + (int)(Math.cos(Math.toRadians(getDegree())) * 1000);
         endY = getPositionY() + (int)(Math.sin(Math.toRadians(getDegree())) * 1000);
-    }
-
-    public Particle(int nodeXPos, int nodeYPos, float nodeDeg) {
     }
 
     public int getPositionX() {
@@ -44,10 +41,14 @@ public class Particle {
         return positionY;
     }
 
-    public float getDegree() {
-        return degree;
+    public int getDegree() {
+        return (int)degree;
     }
 
+    public void move (int distance) {
+        positionX = getPositionX() + (int)(Math.cos(Math.toRadians(getDegree())) * distance );
+        positionY = getPositionY() + (int)(Math.sin(Math.toRadians(getDegree())) * distance );
+    }
 
     /**
      * Returns the distance of the particle to a wall.
@@ -82,17 +83,20 @@ public class Particle {
      * @param sensorRange Distance measured with Ultrasonic sensor
      */
     public void evaluateParticle(RoomMap roomMap,float sensorRange){
-        int maxWeight = 20, calculatedWeight = 0;
         float distance = getDistanceToWall(roomMap.getRoomLines());
 
         if (distance == -1 )
             setWeight(0);
-        else{
-            calculatedWeight = maxWeight - (int) Math.abs(distance - sensorRange);
-            if (calculatedWeight <= 0)
-                calculatedWeight = 0;
+        else {
+            if (sensorRange > distance)
+                weight *= distance / sensorRange;
+            else
+                weight *= sensorRange / distance;
         }
-            setWeight(calculatedWeight);
+    }
+
+    public void normalize (double sumWeight) {
+        setWeight(getWeight() / sumWeight);
     }
 
     public Point findIntersection(int x1, int y1, int x2, int y2){
