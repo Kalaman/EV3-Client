@@ -81,7 +81,7 @@ public class JRobotPanel extends JPanel{
         }
 
         drawParticles(Color.RED,graphics2D);
-        drawParticle(new Particle(virtualRobotX,65,0,0),Color.BLUE,graphics2D);
+        drawParticle(new Particle(virtualRobotX,65,0,0,0),Color.BLUE,graphics2D);
         drawParticle(particles.get(hindex),Color.ORANGE,graphics2D);
         JConsolePanel.writeToConsole("Highest weight: " + particles.get(hindex).getWeight());
     }

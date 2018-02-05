@@ -11,6 +11,7 @@ public class Particle {
     private int positionX;
     private int positionY;
     private float degree;
+    private float degreeSensor;
     private int endX;
     private int endY;
     private double weight;
@@ -24,13 +25,14 @@ public class Particle {
         this.weight = weight;
     }
 
-    public Particle (int posX, int posY, float deg, double particleWeight) {
+    public Particle (int posX, int posY, float deg, float degSens, double particleWeight) {
         positionX = posX;
         positionY = posY;
         degree = deg % 360;
+        degreeSensor = degSens % 360;
         weight = particleWeight;
-        endX = getPositionX() + (int)(Math.cos(Math.toRadians(getDegree())) * 1000);
-        endY = getPositionY() + (int)(Math.sin(Math.toRadians(getDegree())) * 1000);
+        endX = getPositionX() + (int)(Math.cos(Math.toRadians(getSensorDegree())) * 1000);
+        endY = getPositionY() + (int)(Math.sin(Math.toRadians(getSensorDegree())) * 1000);
     }
 
     public int getPositionX() {
@@ -39,6 +41,10 @@ public class Particle {
 
     public int getPositionY() {
         return positionY;
+    }
+
+    public int getSensorDegree () {
+        return (int)degreeSensor;
     }
 
     public int getDegree() {
@@ -86,7 +92,7 @@ public class Particle {
         float distance = getDistanceToWall(roomMap.getRoomLines());
 
         if (distance == -1 )
-            setWeight(1 / JConstants.PARTICLE_AMOUNT);
+            setWeight(0);
         else {
             if (sensorRange > distance)
                 weight *= distance / sensorRange;

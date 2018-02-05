@@ -44,7 +44,8 @@ public class Localizator {
             }
 
             float randomDeg = (float) (Math.random() * 360) ;
-            particleList.add(new Particle(randomX,randomY,randomDeg,1f / JConstants.PARTICLE_AMOUNT));
+            float randomSensDeg = (float) (Math.random() * 360) ;
+            particleList.add(new Particle(randomX,randomY,randomDeg,randomSensDeg,1f / JConstants.PARTICLE_AMOUNT));
         }
     }
 
@@ -109,9 +110,10 @@ public class Localizator {
                 newY = ThreadLocalRandom.current().nextInt(oldParticle.getPositionY() - 10, oldParticle.getPositionY() + 10 + 1) ;
             }
         }
-        int newDegree =  ThreadLocalRandom.current().nextInt(oldParticle.getDegree() - 25, oldParticle.getDegree() + 25 + 1) ;
+        int newDegree =  ThreadLocalRandom.current().nextInt(oldParticle.getDegree() - 10, oldParticle.getDegree() + 10 + 1) ;
+        int newSensDegree =  ThreadLocalRandom.current().nextInt(oldParticle.getSensorDegree() - 10, oldParticle.getSensorDegree() + 10 + 1) ;
 
-        Particle newParticle = new Particle(newX, newY, newDegree,oldParticle.getWeight());
+        Particle newParticle = new Particle(newX, newY, newDegree,newSensDegree,oldParticle.getWeight());
         return newParticle;
     }
 
