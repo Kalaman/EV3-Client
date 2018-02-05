@@ -15,6 +15,7 @@ public class Localizator {
     private ArrayList<Particle> particleList;
     private SVGDiagram map;
     private RoomMap roomMap;
+    private boolean first = true;
 
     public Localizator (int particleAmount,RoomMap roomMap) {
         this.initParticleAmount = particleAmount;
@@ -56,10 +57,12 @@ public class Localizator {
         double sumValue = 0;
 
         for (Particle particle : particleList) {
+            if (!first)
+                particle.move(10);
             particle.evaluateParticle(roomMap,sensorRange);
             sumValue += particle.getWeight();
         }
-
+        first = false;
         for (Particle particle: particleList) {
             particle.normalize(sumValue);
         }

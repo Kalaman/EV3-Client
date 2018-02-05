@@ -86,7 +86,7 @@ public class Particle {
         float distance = getDistanceToWall(roomMap.getRoomLines());
 
         if (distance == -1 )
-            setWeight(0);
+            setWeight(1 / JConstants.PARTICLE_AMOUNT);
         else {
             if (sensorRange > distance)
                 weight *= distance / sensorRange;

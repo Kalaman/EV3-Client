@@ -18,7 +18,7 @@ public class JRobotPanel extends JPanel{
     public static Localizator localizator;
     RoomMap roomMap;
 
-    int virtualRobotX = 15;
+    int virtualRobotX = 0;
     int virtualRobotStep = 10;
 
     public JRobotPanel() {
@@ -69,8 +69,21 @@ public class JRobotPanel extends JPanel{
         }
         catch (Exception e){ e.printStackTrace();}
 
+        ArrayList<Particle> particles = localizator.getParticles();
+        int hindex = 0;
+        double hweight = 0f;
+        for (int i=0;i<particles.size();++i)
+        {
+            if (particles.get(i).getWeight() > hweight) {
+                hweight = particles.get(i).getWeight();
+                hindex = i;
+            }
+        }
+
         drawParticles(Color.RED,graphics2D);
         drawParticle(new Particle(virtualRobotX,65,0,0),Color.BLUE,graphics2D);
+        drawParticle(particles.get(hindex),Color.ORANGE,graphics2D);
+        JConsolePanel.writeToConsole("Highest weight: " + particles.get(hindex).getWeight());
     }
 
 
