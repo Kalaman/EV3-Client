@@ -105,6 +105,14 @@ public class JRobotPanel extends JPanel{
         graphics2D.drawLine(node.getPositionX() ,
                 node.getPositionY() ,endX ,endY);
 
+        // show sensor degree
+        int endX2 = node.getPositionX() + (int)(Math.cos(Math.toRadians(node.getSensorDegree())) * JConstants.PARTICLE_DEGREE_MULTIPLICATOR);
+        int endY2 = node.getPositionY() + (int)(Math.sin(Math.toRadians(node.getSensorDegree())) * JConstants.PARTICLE_DEGREE_MULTIPLICATOR);
+        graphics2D.setColor(Color.BLACK);
+        graphics2D.drawLine(node.getPositionX() ,
+                node.getPositionY() ,endX2 ,endY2);
+
+
         graphics2D.setColor(oldColor);
     }
 
