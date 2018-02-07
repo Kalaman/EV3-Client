@@ -89,15 +89,19 @@ public class Particle {
      * @param sensorRange Distance measured with Ultrasonic sensor
      */
     public void evaluateParticle(RoomMap roomMap,float sensorRange){
+        float positionMalus = 1;
         float distance = getDistanceToWall(roomMap.getRoomLines());
+
+        if (getPositionY() <= 50)
+            positionMalus = 0.5f;
 
         if (distance == -1 )
             setWeight(0);
         else {
             if (sensorRange > distance)
-                weight *= distance / sensorRange;
+                weight *= (distance / sensorRange) * positionMalus;
             else
-                weight *= sensorRange / distance;
+                weight *= sensorRange / distance * positionMalus;
         }
     }
 
