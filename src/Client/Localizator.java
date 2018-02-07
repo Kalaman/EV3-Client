@@ -43,8 +43,9 @@ public class Localizator {
                 randomY = (int) (Math.random() * roomMap.getSvgDiagram().getHeight());
             }
 
-            float randomDeg = (float) (Math.random() * 360) ;
-            float randomSensDeg = (float) (Math.random() * 360) ;
+            float randomDeg = 0.0f ;
+            int tempSensDeg = (Math.round(randomDeg) - 90) % 360;
+            float randomSensDeg = (float) ThreadLocalRandom.current().nextInt(tempSensDeg - 10 ,tempSensDeg + 10);
             particleList.add(new Particle(randomX,randomY,randomDeg,randomSensDeg,1f / JConstants.PARTICLE_AMOUNT));
         }
     }
@@ -81,20 +82,6 @@ public class Localizator {
             temp_particleList.add(generateNewParticle(particleList.get(index),false));
         }
 
-        /**
-         * For debug purposes
-         * Finds the particle with the highest weight
-         */
-        int hindex = 0;
-        double hweight = 0;
-        for (int i=0;i<temp_particleList.size();++i) {
-            if (temp_particleList.get(i).getWeight() > hweight)
-            {
-                hweight = temp_particleList.get(i).getWeight();
-                hindex = i;
-            }
-        }
-
         particleList = temp_particleList;
     }
 
@@ -106,12 +93,12 @@ public class Localizator {
                 newX = (int) (Math.random() * roomMap.getSvgDiagram().getWidth());
                 newY = (int) (Math.random() * roomMap.getSvgDiagram().getHeight());
             } else {
-                newX = ThreadLocalRandom.current().nextInt(oldParticle.getPositionX() - 10, oldParticle.getPositionX() + 10 + 1) ;
-                newY = ThreadLocalRandom.current().nextInt(oldParticle.getPositionY() - 10, oldParticle.getPositionY() + 10 + 1) ;
+                newX = ThreadLocalRandom.current().nextInt(oldParticle.getPositionX() - 10, oldParticle.getPositionX() + 11) ;
+                newY = ThreadLocalRandom.current().nextInt(oldParticle.getPositionY() - 10, oldParticle.getPositionY() + 11) ;
             }
         }
-        int newDegree =  ThreadLocalRandom.current().nextInt(oldParticle.getDegree() - 10, oldParticle.getDegree() + 10 + 1) ;
-        int newSensDegree =  ThreadLocalRandom.current().nextInt(oldParticle.getSensorDegree() - 10, oldParticle.getSensorDegree() + 10 + 1) ;
+        int newDegree =  ThreadLocalRandom.current().nextInt(oldParticle.getDegree() - 10, oldParticle.getDegree() + 11) ;
+        int newSensDegree =  ThreadLocalRandom.current().nextInt(oldParticle.getSensorDegree() - 10, oldParticle.getSensorDegree() + 11) ;
 
         Particle newParticle = new Particle(newX, newY, newDegree,newSensDegree,oldParticle.getWeight());
         return newParticle;
